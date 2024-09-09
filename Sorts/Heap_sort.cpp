@@ -1,71 +1,89 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
+#include <iomanip>
 
 
-void Heapify(std::vector<int>& buf, int i, bool flag=true){
-    if (i >= buf.size() or i * 2 + 1 >= buf.size() or i * 2 + 2 >= buf.size()) return;
-    if (flag) Heapify(buf,  i + 1);
+void Heapify(std::vector<int>& buf, int i, int size) {
+    int max = i, child_1 = i * 2 + 1, child_2 = i * 2 + 2;
 
-    if (buf[i] >= buf[i * 2 + 1] and buf[i] >= buf[i * 2 + 2]) return;
+    if (child_1 < size and buf[child_1] > buf[max]) max = child_1;
 
-//    std::cout << "i: " << i << ", num: " << buf[i] << "   "
-//                << "i * 2 + 1: " << i * 2 + 1 << ", num: " << buf[i * 2 + 1] << "   "
-//                << "i * 2 + 2: " << i * 2 + 2 << ", num: " << buf[i * 2 + 2] << '\n';
+    if (child_2 < size and buf[child_2] > buf[max]) max = child_2;
 
-    int max = i;
-    if (buf[max] < buf[i * 2 + 1]) max = i * 2 + 1;
-    if (buf[max] < buf[i * 2 + 2]) max = i * 2 + 2;
-
-    if (max != i){
+    if (max != i) {
         std::swap(buf[i], buf[max]);
-//        std::cout << "We need to swap numbers\n"
-//                    << "Now i: " << i << ", num: " << buf[i] << "   "
-//                    << "max: " << max << ", num: " << buf[max] << "\n\n";
-//        std::cout << "Vector: ";
-//        for (const auto& i : buf) std::cout << i << ' ';
-//        std::cout << "\n\n";
-
-        Heapify(buf,  max);
+        Heapify(buf, max, size);
     }
-//    else std::cout << "Nothing to swap\n\n";
 }
+
+void BuildHeap(std::vector<int>& buf) {
+    int size = buf.size();
+    for (int i = size / 2 - 1; i >= 0; i--) {
+        Heapify(buf, i, size);
+    }
+}
+
+void HeapSort(std::vector<int>& buf) {
+    BuildHeap(buf);
+    int size = buf.size();
+    for (int i = size - 1; i > 0; --i) {
+        std::swap(buf[0], buf[i]);
+        Heapify(buf, 0, i);
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//// MADE BY GPT
+
+// Функция для визуализации дерева кучи
+void PrintHeapTree(const std::vector<int>& buf) {
+    int size = buf.size();
+    int levels = std::log2(size) + 1; // Количество уровней в дереве
+
+    int index = 0; // Индекс для текущего элемента в массиве
+    for (int level = 0; level < levels; ++level) {
+        int elementsOnLevel = std::pow(2, level); // Количество элементов на текущем уровне
+        int maxElementsOnLevel = std::min(elementsOnLevel, size - index); // Оставшиеся элементы
+
+        // Вывести отступы для каждого уровня, чтобы центрировать элементы
+        for (int i = 0; i < (std::pow(2, levels - level - 1) - 1); ++i)
+            std::cout << "    "; // Увеличил количество пробелов для лучшей визуализации
+
+        // Вывести все элементы на уровне
+        for (int i = 0; i < maxElementsOnLevel; ++i) {
+            std::cout << buf[index++] << "    "; // Больше пробелов между элементами
+            if (i < maxElementsOnLevel - 1) {
+                // Вывести отступы между элементами на одном уровне
+                for (int j = 0; j < (std::pow(2, levels - level) - 1); ++j)
+                    std::cout << "    "; // Увеличил отступы между элементами
+            }
+        }
+        std::cout << std::endl; // Переход на новую строку для нового уровня
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 int main() {
     std::vector<int> buf = {1, 5, 7, 2, 3, 4, 9, 6, 7, 0, 9};
-    std::cout << "Vector: ";
+
+    std::cout << "Original vector: ";
     for (const auto& i : buf) std::cout << i << ' ';
     std::cout << "\n\n";
 
+    BuildHeap(buf);
+    std::cout << "Heap tree visualization before sorting:\n";
+    PrintHeapTree(buf);
+    std::cout << '\n';
 
-    Heapify(buf, 0);
-
-    std::cout << "Heapified vector: ";
-    for (const auto& i : buf) std::cout << i << ' ';
-
-    std::cout << "\n\n";
-
-//    std::cout << "Now we need to sort it\n\n";
-
-    std::vector<int> sorted_buf;
-    while (buf.size() > 2){
-        sorted_buf.push_back(buf[0]);
-        std::swap(buf[0], buf[buf.size() - 1]);
-        buf.pop_back();
-
-        Heapify(buf, 0, false);
-    }
-    if (buf[0] > buf[1]){
-        sorted_buf.push_back(buf[0]);
-        sorted_buf.push_back(buf[1]);
-    }
-    else {
-        sorted_buf.push_back(buf[1]);
-        sorted_buf.push_back(buf[0]);
-    }
+    HeapSort(buf);
 
     std::cout << "Sorted vector: ";
-    for (const auto& i : sorted_buf) std::cout << i << ' ';
+    for (const auto& i : buf) std::cout << i << ' ';
+    std::cout << "\n";
 
     return 0;
 }
