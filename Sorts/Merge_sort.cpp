@@ -8,24 +8,29 @@ void MergeSort(std::vector<int>& buf){
     std::vector<int> left(buf.begin(), buf.begin() + (int) buf.size() / 2),
                     right(buf.begin() + (int) buf.size() / 2, buf.end());
 
-    MergeSort(right);
     MergeSort(left);
+    MergeSort(right);
 
     int i = 0, j = 0;
-    buf.clear();
-    while (i < right.size() and j < left.size()){
-        if (right[i] < left[j]){
-            buf.push_back(right[i]);
+    while (i < left.size() and j < right.size()){
+        if (left[i] < right[j]){
+            buf[i + j] = left[i];
             i++;
         }
         else {
-            buf.push_back(left[j]);
+            buf[i + j] = right[j];
             j++;
         }
     }
 
-    if (i == right.size()) buf.insert(buf.end(), left.begin() + j, left.end());
-    else buf.insert(buf.end(), right.begin() + i, right.end());
+    while (i < left.size()) {
+        buf[i + j] = left[i];
+        i++;
+    }
+    while (j < right.size()) {
+        buf[i + j] = right[j];
+        j++;
+    }
 }
 
 int main(){
