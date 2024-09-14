@@ -41,6 +41,8 @@ void RadixSort(std::vector<unsigned int>& buf){
 int main() {
     std::vector<unsigned int> buf = {1, 5, 7, 2, 3, 4, 9, 6, 7, 0, 9};
 
+    for(int i = 0; i < 10000000; i++) buf.push_back(std::rand() % 1000);
+
     std::cout << "Original vector: ";
     for (const auto& i : buf) std::cout << i << ' ';
     std::cout << "\n\n";
