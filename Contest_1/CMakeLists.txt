@@ -1,0 +1,7 @@
+add_executable(Ex_C C.cpp)
+add_executable(Ex_F F.cpp)
+add_executable(Ex_G G.cpp)
+add_executable(Ex_H H.cpp)
+add_executable(Ex_I I.cpp)
+add_executable(Ex_J J.cpp)
+add_executable(Ex_K K.cpp)
