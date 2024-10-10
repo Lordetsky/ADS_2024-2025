@@ -39,13 +39,13 @@ int main(){
     std::vector<int> buf(n);
     for (auto& el : buf) std::cin >> el;
 
-    std::cout << "Original vector: ";
-    for (const auto& i : buf) std::cout << i << ' ';
-    std::cout << "\n\n";
+//    std::cout << "Original vector: ";
+//    for (const auto& i : buf) std::cout << i << ' ';
+//    std::cout << "\n\n";
 
     MergeSort(buf);
 
-    std::cout << "Sorted vector: ";
+//    std::cout << "Sorted vector: ";
     for (const auto& i : buf) std::cout << i << ' ';
     std::cout << "\n";
 
