@@ -56,10 +56,14 @@ private:
         if (node == root) {
             if (node->left == nullptr and node->right == nullptr) delete root;
             else if (node->right == nullptr) root = root->left;
-            else root = root->right;
+            else if (node->left == nullptr) root = root->right;
+            else {
+                Node* tmp = max(node->left);
+                node->data = tmp->data;
+                remove(tmp);
+            }
         }
-        
-        if (node->left == nullptr and node->right == nullptr) {
+        else if (node->left == nullptr and node->right == nullptr) {
             Node* tmp = node->parent;
             
             if (tmp->left == node) tmp->left = nullptr;
@@ -130,6 +134,7 @@ public:
 
     void print() {
         print(root);
+        std::cout << '\n';
     }
 
     void remove(T d) {
@@ -151,9 +156,13 @@ public:
 
 int main() {
     Tree<double> tree;
+    tree.insert(10);
     for (size_t i = 0; i < 20; ++i) {
         tree.insert(rd() % 30);
     }
+    tree.print();
+
+    tree.remove(10);
     tree.print();
 
     return 0;
