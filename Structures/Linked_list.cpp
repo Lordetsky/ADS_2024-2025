@@ -11,8 +11,8 @@ private:
     struct Cell {
         T data;
         int index;
-        Cell *prev = NULL;
-        Cell *next = NULL;
+        Cell *prev = nullptr;
+        Cell *next = nullptr;
 
         Cell(T d, int i, Cell* p): data(d), index(i), prev(p) {}
 
